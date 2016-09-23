@@ -1,0 +1,4 @@
+.PHONY: venv
+
+venv:
+	virtualenv .
