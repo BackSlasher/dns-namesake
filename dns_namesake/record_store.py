@@ -48,7 +48,7 @@ class Record(object):
         if self.is_regex:
             regex_res = re.match(self.regex, name)
             if regex_res:
-                return Respones(
+                return Result(
                     self.type,
                     re.sub(self.regex, self.payload, name),
                 )
@@ -56,7 +56,7 @@ class Record(object):
                 return None
         else:
             if name == self.name:
-                return Response(
+                return Result(
                     self.type,
                     self.payload,
                     )

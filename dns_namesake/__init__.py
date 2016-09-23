@@ -8,6 +8,9 @@ def main():
 
     rs = RecordStore()
 
+    rs.add('bla.google.com', dns.CNAME, 'google.com')
+    rs.add('blu.google.com', dns.A, '1.2.3.4')
+
     factory = server.DNSServerFactory(
         clients=[
             StoreResolver(rs),

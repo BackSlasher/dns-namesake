@@ -20,6 +20,7 @@ class StoreResolver(object):
             #    if query.type == res.type:
                 answer = dns.RRHeader(
                     name=name,
+                    type=res.type,
                     payload=res.to_record(),
                 )
                 answers = [answer]
