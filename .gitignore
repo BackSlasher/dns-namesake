@@ -1,2 +1,10 @@
 # vim
 .*.swp
+
+# venv
+/bin/
+/include/
+/lib/
+/local/
+/pip-selfcheck.json
+/share/
