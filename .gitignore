@@ -8,3 +8,4 @@
 /local/
 /pip-selfcheck.json
 /share/
+/*.egg-info/

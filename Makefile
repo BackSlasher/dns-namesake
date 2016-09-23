@@ -2,3 +2,4 @@
 
 venv:
 	virtualenv .
+	bin/pip install -e .
