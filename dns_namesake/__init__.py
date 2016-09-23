@@ -1,13 +1,18 @@
 from twisted.internet import reactor
 from twisted.names import client, dns, server
 
+from store_resolver import StoreResolver
+from record_store import RecordStore
 
 def main():
-    """
-    Run the server.
-    """
+
+    rs = RecordStore()
+
     factory = server.DNSServerFactory(
-        clients=[client.Resolver(resolv='/etc/resolv.conf')]
+        clients=[
+            StoreResolver(rs),
+            #client.Resolver(resolv='/etc/resolv.conf'),
+        ],
     )
 
     protocol = dns.DNSDatagramProtocol(controller=factory)
