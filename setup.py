@@ -31,7 +31,7 @@ setup(
     license='GPLv3',
 
     install_requires=[
-
+        'twisted',
     ],
 
     extras_require={

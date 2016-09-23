@@ -9,3 +9,6 @@
 /pip-selfcheck.json
 /share/
 /*.egg-info/
+
+# python
+*.pyc
