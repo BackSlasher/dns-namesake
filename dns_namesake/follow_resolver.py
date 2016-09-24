@@ -5,12 +5,9 @@ from twisted.python.failure import Failure
 
 class FollowResolver(ResolverChain):
     """
-    NITZ: Copied from Resolver in root.py
+    Copied from Resolver in root.py
     Will follow CNAMEs
-    L{Resolver} implements recursive lookup starting from a specified list of
-    root servers.
 
-    @ivar hints: See C{hints} parameter of L{__init__}
     @ivar _maximumQueries: See C{maximumQueries} parameter of L{__init__}
     @ivar _reactor: See C{reactor} parameter of L{__init__}
     @ivar _resolverFactory: See C{resolverFactory} parameter of L{__init__}
@@ -18,10 +15,9 @@ class FollowResolver(ResolverChain):
     def __init__(self, child_resolvers, maximumQueries=10,
                  reactor=None, resolverFactory=None):
         """
-        @param hints: A L{list} of L{str} giving the dotted quad
-            representation of IP addresses of root servers at which to
-            begin resolving names.
-        @type hints: L{list} of L{str}
+        @param child_resolvers: List of resolvers that actually do
+            the queries
+        @type child_resolvers: L{list} of L{Resovler}
 
         @param maximumQueries: An optional L{int} giving the maximum
              number of queries which will be attempted to resolve a
@@ -46,33 +42,8 @@ class FollowResolver(ResolverChain):
 
 
     def _query(self, query, timeout, filter):
-    #def _query(self, name, cls, type, timeout):
         """
-        Build a L{dns.Query} for the given parameters and dispatch it
-        to each L{IResolver} in C{self.resolvers} until an answer or
-        L{error.AuthoritativeDomainError} is returned.
-
-        @type name: C{str}
-        @param name: DNS name to resolve.
-
-        @type type: C{int}
-        @param type: DNS record type.
-
-        @type cls: C{int}
-        @param cls: DNS record class.
-
-        @type timeout: Sequence of C{int}
-        @param timeout: Number of seconds after which to reissue the query.
-            When the last timeout expires, the query is considered failed.
-
-        @rtype: L{Deferred}
-        @return: A L{Deferred} which fires with a three-tuple of lists of
-            L{twisted.names.dns.RRHeader} instances.  The first element of the
-            tuple gives answers.  The second element of the tuple gives
-            authorities.  The third element of the tuple gives additional
-            information.  The L{Deferred} may instead fail with one of the
-            exceptions defined in L{twisted.names.error} or with
-            C{NotImplementedError}.
+        query our child resolvers in a chain with a specific query
         """
         if not self.resolvers:
             return defer.fail(error.DomainError())
@@ -87,9 +58,7 @@ class FollowResolver(ResolverChain):
 
     def _lookup(self, name, cls, type, timeout):
         """
-        Implement name lookup by recursively discovering the authoritative
-        server for the name and then asking it, starting at one of the servers
-        in C{self.hints}.
+        Implement lookup by starting at the original query and following CNAMES
         """
         if timeout is None:
             # A series of timeouts for semi-exponential backoff, summing to an
@@ -100,17 +69,12 @@ class FollowResolver(ResolverChain):
             self._maximumQueries)
 
 
-    # TODO nitz: Remove servers, query resolvers instaed
     def _discoverAuthority(self, query, timeout, queriesLeft):
         """
-        Issue a query to a server and follow a delegation if necessary.
+        Issue a query to a server and follow a cname if necessary.
 
         @param query: The query to issue.
         @type query: L{dns.Query}
-
-        @param servers: The servers which might have an answer for this
-            query.
-        @type servers: L{list} of L{tuple} of L{str} and L{int}
 
         @param timeout: A C{tuple} of C{int} giving the timeout to use for this
             query.
@@ -136,8 +100,7 @@ class FollowResolver(ResolverChain):
 
     def _discoveredAuthority(self, response, query, timeout, queriesLeft):
         """
-        Interpret the response to a query, checking for error codes and
-        following delegations if necessary.
+        Interpret the response to a query, following CNAMES if necessary.
 
         @param response: The L{Message} received in response to issuing C{query}.
         @type response: L{Message}
