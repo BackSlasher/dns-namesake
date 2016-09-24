@@ -63,6 +63,13 @@ class Record(object):
             else:
                 return None
 
+    def __repr__(self):
+        if self.is_regex:
+            rep = '/{}/'.format(self.regex)
+        else:
+            rep = self.name
+        return '{}({} {} {})'.format(type(self).__name__, rep, self.type, self.payload)
+
 class RecordStore(object):
     def __init__(self):
         self.records = []

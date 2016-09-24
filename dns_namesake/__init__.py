@@ -11,7 +11,7 @@ def main():
 
     rs.add('bla.google.com', dns.CNAME, 'google.com')
     rs.add('blu.google.com', dns.A, '1.2.3.4')
-    rs.add(r'/(.+)\.cnet.com', dns.CNAME, r'\1.google.com')
+    rs.add(r'/(.+)\.cnet.com/', dns.CNAME, r'\1.google.com')
 
     factory = server.DNSServerFactory(
         clients=[
