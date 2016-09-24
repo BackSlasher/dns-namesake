@@ -3,6 +3,7 @@ from twisted.names import client, dns, server
 
 from store_resolver import StoreResolver
 from record_store import RecordStore
+from follow_resolver import FollowResolver
 
 def main():
 
@@ -13,8 +14,10 @@ def main():
 
     factory = server.DNSServerFactory(
         clients=[
-            StoreResolver(rs),
-            #client.Resolver(resolv='/etc/resolv.conf'),
+            FollowResolver( child_resolvers=[
+                StoreResolver(rs),
+                client.Resolver(resolv='/etc/resolv.conf'),
+            ]),
         ],
     )
 
