@@ -35,7 +35,7 @@ setup(
     ],
 
     extras_require={
-        'dev': [''],
+        'dev': ['pylint'],
         'test': [''],
     },
 

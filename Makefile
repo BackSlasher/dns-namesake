@@ -2,4 +2,4 @@
 
 venv:
 	virtualenv .
-	bin/pip install -e .
+	bin/pip install -e .[dev]
