@@ -27,7 +27,7 @@ Serve ``yahoo.com`` as ``8.8.8.8``:
 Redirect all google subdomains to the same subdomain in cnet:
 ``bin/dns-namesake --cname='/(.+)\.google\.com/,\1.cnet.com'``
 
-Use a file:
+Use a file (NOT READY YET):
 
 ::
 
