@@ -33,9 +33,7 @@ class StoreResolver(ResolverBase):
                 return defer.succeed((answers, authority, additional))
             # Return negative response
             else:
-                print 'shallnotpass'
                 return defer.fail(error.AuthoritativeDomainError())
         # Don't know
         else:
-            print 'dunno'
             return defer.fail(error.DomainError())

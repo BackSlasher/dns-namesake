@@ -182,7 +182,6 @@ class FollowResolver(ResolverChain):
         seen = set()
         name = query.name
         record = None
-        print 'aaaa'
         while True:
             seen.add(name)
             previous = record
