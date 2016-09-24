@@ -1,17 +1,21 @@
 from record_store import RecordStore
 from twisted.internet import reactor, defer
 from twisted.names import client, dns, error, server
+from twisted.names.common import ResolverBase
 
 
-class StoreResolver(object):
+class StoreResolver(ResolverBase):
     def __init__(self, store):
+        ResolverBase.__init__(self)
         assert isinstance(store, RecordStore), 'This is not a record store'
         self.store = store
 
-    def query(self, query, timeout=None):
-        name = query.name.name
+    def _lookup(self, name, cls, type, timeout):
+        if cls != dns.IN:
+            return defer.fail(error.DomainError())
+
         # Try to answer dynamically
-        res = self.store.match(name, query.type)
+        res = self.store.match(name, type)
         
         if res:
             # Return positive response
